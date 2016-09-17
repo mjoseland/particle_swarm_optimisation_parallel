@@ -1,0 +1,11 @@
+//
+// Created by Malcolm Joseland on 17/08/2016.
+//
+
+#ifndef PARTICLE_SWARM_OPTIMISATION_PSO_TYPES_H
+#define PARTICLE_SWARM_OPTIMISATION_PSO_TYPES_H
+
+#define DIMENSION uint8_t
+#define REAL double
+
+#endif //PARTICLE_SWARM_OPTIMISATION_PSO_TYPES_H

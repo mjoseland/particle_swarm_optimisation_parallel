@@ -1,0 +1,54 @@
+Immediate TODO:
+    . find example problems
+    . modify Problem definition based on ^
+    . check over all other definitions based on finalised ^
+    . commit
+    . implement 2-3 problems & commit
+    . implement .cpp files & commit
+
+Features:
+    . Essential
+        - termination critereon
+            . optional?
+            . time
+            . strength of match
+        - input?? from text file or hard coded?
+            . possibly both?
+        - MVC (ish)
+            . m: Particle, Swarm, some kind of fitness tester
+            . v: Visualiser, messages for feedback (stderr, stdout?)
+            . c: input method
+        - RNG interface/class
+        - VMAX?
+        - fitness
+
+    . Possibly Essential
+        - visualisation
+        - ability to show timing values (iterations/second/particle or whatever), messages for feedback
+
+    . Optional
+        - ability to adjust parameters
+        - test performance of vector<double[4]>, vector<array<double, 4>>, vector<vector<double>> in particle
+
+    . Things that might need to be changed:
+        - FitnessTester as class instead of function pointer (or maybe interface)
+            . keep in a separate folder?
+        - parameters: not as constants?
+        - modify
+    . Make things const wherever possible
+    .
+
+
+
+
+Sources/info:
+    . algorithm: https://hal.archives-ouvertes.fr/file/index/docid/764996/filename/SPSO_descriptions.pdf
+        - 35 particles chosen as optimal from ^
+    . also, SPSO-2011 : http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6557848&tag=1
+    . hypersphere method from Muller, M. E. "A Note on a Method for Generating Points Uniformly on N-Dimensional Spheres." Comm. Assoc. Comput. Mach. 2, 19-20, Apr. 1959.
+           - as described by wolfram alpha
+
+    . gbest topology
+    . Optimisation: time taken to complete n iterations
+    . mention in report : why star/all connected topology was used
+    . ^ : why gbest was only updated after an iteration of all particles

@@ -19,15 +19,20 @@ class Problem {
 public:
 	const string name_;
     const DIMENSION num_dimensions_;       // count of dimensions
-    const bool minimum_optimal_;         // true : minimum output is optimal for this problem
-                                                // false : we are trying to maximise the output
 	const REAL lower_bound_;
 	const REAL upper_bound_;
 
-    Problem(string name, DIMENSION n_dimensions, bool minimum_optimal, double lower_bound, double upper_bound);
+    Problem(string name, DIMENSION n_dimensions, double lower_bound, double upper_bound, bool minimum_optimal);
 	~Problem();
 
 	virtual REAL getOutput(const vector<double> &input_position) const { return 0.0; }
+
+	// returns true if compare_output is more optimal than inital_output
+	bool outputMoreOptimal(REAL initial_output, REAL compare_output) const;
+
+private:
+	const bool minimum_optimal_;         // true : minimum output is optimal for this problem
+	// false : we are trying to maximise the output
 };
 
 

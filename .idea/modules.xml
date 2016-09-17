@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/particle_swarm_optimisation.iml" filepath="$PROJECT_DIR$/.idea/particle_swarm_optimisation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/particle_swarm_optimisation_parallel.iml" filepath="$PROJECT_DIR$/.idea/particle_swarm_optimisation_parallel.iml" />
     </modules>
   </component>
 </project>

@@ -5,7 +5,7 @@
 #include "BrainVsBodyWeight.h"
 
 BrainVsBodyWeight::BrainVsBodyWeight() :
-		Problem("Body Weight From Brain Weight", 1, true, 0.0, 100.0){
+		Problem("Body Weight From Brain Weight", 1, 0.0, 100.0, true){
 	data = RegressionFileReader::getFileData(file_name);
 }
 

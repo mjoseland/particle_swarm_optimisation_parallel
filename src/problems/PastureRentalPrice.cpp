@@ -5,7 +5,7 @@
 #include "PastureRentalPrice.h"
 
 PastureRentalPrice::PastureRentalPrice() :
-		Problem("Predicting Pasture Rent per Grassy Acre", 3, true, 0.0, 100.0){
+		Problem("Predicting Pasture Rent per Grassy Acre", 3, 0.0, 100.0, true){
 	data = RegressionFileReader::getFileData(file_name);
 }
 

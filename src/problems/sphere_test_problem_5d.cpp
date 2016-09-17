@@ -5,7 +5,7 @@
 #include "sphere_test_problem_5d.h"
 
 ParabolaTestProblem5d::ParabolaTestProblem5d() :
-		Problem("Minimize 5-Dimension Parabola", 5, true, -100.0, 100.0) { }
+		Problem("Minimize 5-Dimension Parabola", 5, -100.0, 100.0, true) { }
 
 REAL ParabolaTestProblem5d::getOutput(const vector<REAL> &dimension_values) const {
 	REAL output = 0.0;

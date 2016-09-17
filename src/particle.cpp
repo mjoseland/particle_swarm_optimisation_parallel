@@ -95,8 +95,7 @@ void Particle::iterate() {
 	REAL new_output = problem_->getOutput(position_);
 
 	// if the new solution is better than the old one, update the old one
-	if ((problem_->minimum_optimal_ && new_output < previous_best_output_) ||
-			(!(problem_->minimum_optimal_) && new_output > previous_best_output_)) {
+	if (problem_->outputMoreOptimal(previous_best_output_, new_output)) {
 		previous_best_output_ = new_output;
 
 		for (DIMENSION i = 0; i < num_dimensions_; i++) {

@@ -1,5 +1,7 @@
 pso_test
+.DS_Store
+workspace.xml
+tasks.xml
 
 *.swp
-
-.DS_Store
+*.iws

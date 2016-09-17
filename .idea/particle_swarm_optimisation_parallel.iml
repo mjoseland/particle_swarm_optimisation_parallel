@@ -12,17 +12,20 @@
       <sourceFolder url="file://$MODULE_DIR$/src/problems/problem.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/problems/sphere_test_problem_50d.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/problems/PastureRentalPrice.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/problems/PastureRentalPrice.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/problems/sphere_test_problem_5d.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/problems/sphere_test_problem_25d.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/problems/BrainVsBodyWeight.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/problems/BrainVsBodyWeight.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/problems/sphere_test_problem_50d.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/problems/PastureRentalPrice.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Swarm.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/pso_types.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/particle.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/resources/brain_vs_body_weight.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/resources/pasture_rental_price.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Makefile" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">

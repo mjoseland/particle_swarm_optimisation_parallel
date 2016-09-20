@@ -5,16 +5,26 @@
 #include <iostream>
 #include "swarm.h"
 
-Swarm::Swarm(const Problem *const problem) : problem_(problem) {
+Swarm::Swarm(Problem *problem) : problem_(problem) {
 	// initialise the required number of particles in the particles_ vector
 	particles_.reserve(SWARM_SIZE);
+
+
+	//#pragma omp parallel
+
+	// create a copy of the problem for each thread for use by particles
+	// all references to problem_ from this class will still use the originial problem but all
+	// use of the problem object within particle will use a thread-unique copy of the original
+	// this w
+	//Problem private_problem = *problem;
+
 	for (size_t i = 0; i < SWARM_SIZE; i++) {
 		particles_.push_back(Particle(problem_, i));
 	}
 
 	// find and store the neighbours of each particle using the ring topology
 	// each particle's neibhbours: i − 1 mod(SWARM_SIZE), i, i + 1 mod(SWARM_SIZE)
-	neighbours_ = vector<vector<int>>(SWARM_SIZE, vector<int>(3));
+	neighbours_ = vector<vector<size_t>>(SWARM_SIZE, vector<size_t>(3));
 	for (size_t i = 0; i < SWARM_SIZE; i++) {
 		neighbours_[i][0] = (i - 1) % SWARM_SIZE;
 		neighbours_[i][1] = i;
@@ -34,33 +44,33 @@ REAL Swarm::getBestSolutionOutput() {
 
 
 void Swarm::iterateNTimes(int iterate_count) {
-	REAL global_best_output = particles_[0].getPreviousBestOutput();
-
-	// branch for problem requiring minimisation
 	// perform the required number of iterations
 	for (int i = 0; i < iterate_count; i++) {
-		// iterate and get the previous best of the first particle
-		//particles_[0].iterate();
-		//global_best_output = particles_[0].getPreviousBestOutput();
+		// iterate all remaining particles while retaining the global best output
 
-		//iterate all remaining particles while retaining the global best output
-		for (size_t i = 0; i < SWARM_SIZE; i++) {
-			particles_[i].iterate();
-
-			if (problem_->outputMoreOptimal(global_best_output, particles_[i].getPreviousBestOutput())) {
-				global_best_output = particles_[i].getPreviousBestOutput();
-				optimal_particle_index_ = i;
-			}
+		#pragma omp parallel for
+		for (size_t j = 0; j < SWARM_SIZE; j++) {
+			particles_[j].iterate();
 		}
-
 		// adjust particle neighbourhood bests
 		setParticleNeighbourhoodBests();
+
+		// find and set the optimal particle index
+		optimal_particle_index_ = 0;
+		REAL global_best_output = particles_[0].getPreviousBestOutput();
+		for (size_t j = 1; j < SWARM_SIZE; j++) {
+			if (problem_->outputMoreOptimal(global_best_output, particles_[j].getPreviousBestOutput())) {
+				optimal_particle_index_ = j;
+				global_best_output = particles_[j].getPreviousBestOutput();
+			}
+		}
 	}
 }
 
 
 void Swarm::setParticleNeighbourhoodBests() {
 	// set each particle's neighbourhood best to the position of the particle with the lowest previous best output
+	//#pragma omp parallel for
 	for (size_t i = 0; i < SWARM_SIZE; i++) {
 		size_t best_neighbour_i = neighbours_[i][0];
 		REAL best_neighbour_output = particles_[best_neighbour_i].getPreviousBestOutput();

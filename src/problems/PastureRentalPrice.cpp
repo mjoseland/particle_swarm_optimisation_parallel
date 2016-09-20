@@ -30,3 +30,7 @@ REAL PastureRentalPrice::getOutput(const vector<REAL> &dimension_values) const {
 
 	return sqrt(squared_difference);
 }
+
+//Problem *PastureRentalPrice::getCopy() {
+	//return new PastureRentalPrice();
+//}

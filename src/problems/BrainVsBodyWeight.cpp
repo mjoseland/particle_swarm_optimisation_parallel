@@ -2,6 +2,7 @@
 // Created by Malcolm Joseland on 17/09/2016.
 //
 
+#include <iostream>
 #include "BrainVsBodyWeight.h"
 
 BrainVsBodyWeight::BrainVsBodyWeight() :
@@ -31,3 +32,7 @@ REAL BrainVsBodyWeight::getOutput(const vector<REAL> &dimension_values) const {
 
 	return sqrt(squared_difference);
 }
+
+//Problem *BrainVsBodyWeight::getCopy() {
+	//return new BrainVsBodyWeight();
+//}

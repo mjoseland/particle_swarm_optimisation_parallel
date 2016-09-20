@@ -18,6 +18,7 @@ public:
 
 	// find the sum of the value at all dimensions squared (not sigma value)
 	REAL getOutput(const vector<REAL> &dimension_values) const;
+	//Problem *getCopy();
 };
 
 

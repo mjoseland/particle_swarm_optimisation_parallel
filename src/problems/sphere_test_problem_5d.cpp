@@ -16,3 +16,7 @@ REAL ParabolaTestProblem5d::getOutput(const vector<REAL> &dimension_values) cons
 
 	return output;
 }
+
+//Problem *ParabolaTestProblem5d::getCopy() {
+	//return new ParabolaTestProblem5d();
+//}

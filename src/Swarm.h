@@ -6,6 +6,7 @@
 #define PARTICLE_SWARM_OPTIMISATION_SWARM_H
 
 #include <algorithm>
+#include <omp.h>
 
 #include "pso_types.h"
 #include "particle.h"
@@ -20,7 +21,7 @@ using namespace std;
  */
 class Swarm {
 public:
-    Swarm(const Problem *const problem);
+    Swarm(Problem *problem);
 
 	const vector<REAL> *const getBestSolution();
 	REAL getBestSolutionOutput();
@@ -32,7 +33,7 @@ private:
 	size_t optimal_particle_index_;
 
     vector<Particle> particles_;
-	vector<vector<int>> neighbours_;
+	vector<vector<size_t>> neighbours_;
 
 	void setParticleNeighbourhoodBests();
 };

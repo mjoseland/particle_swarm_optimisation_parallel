@@ -28,6 +28,7 @@ Particle::Particle(const Problem *const problem, size_t particle_id) : problem_(
 	position_ = vector<REAL>(num_dimensions_);
 	velocity_ = vector<REAL>(num_dimensions_);
 	previous_best_position_ = vector<REAL>(num_dimensions_);
+	neighbourhood_best_position_ = vector<REAL>(num_dimensions_);
 
 	for (DIMENSION i = 0; i < num_dimensions_; i++) {
 		// initialise the position for this dimension to a random position in the search space (3.3)
@@ -48,6 +49,7 @@ Particle::Particle(const Problem *const problem, size_t particle_id) : problem_(
 
 	// initialise previous_best_output_
 	previous_best_output_ = problem_->getOutput(position_);
+
 }
 
 REAL Particle::getPreviousBestOutput() const {
@@ -59,7 +61,11 @@ const vector<REAL> *Particle::getPreviousBestPosition() const {
 }
 
 void Particle::setNeighbourhoodBest(const vector<REAL> *new_neighbourhood_best_position) {
-	neighbourhood_best_position_ = new_neighbourhood_best_position;
+	for (DIMENSION i = 0; i < num_dimensions_; i++) {
+		neighbourhood_best_position_[i] = (*new_neighbourhood_best_position)[i];
+	}
+
+	neighbourhood_best_ptr_ = new_neighbourhood_best_position;
 }
 
 void Particle::iterate() {
@@ -115,7 +121,7 @@ inline void Particle::getHypersphereRandomPoint(vector<REAL> &hypersphere_random
 
 	// if neighbourhood_best and previous_best values point to the same vector, then the
 	// neighbourhood best for this particle is from the particle itself (3.4.3)
-	bool neighbourhood_best_from_this_particle = neighbourhood_best_position_ ==
+	bool neighbourhood_best_from_this_particle = neighbourhood_best_ptr_ ==
 	                                             &previous_best_position_;
 
 	// for each dimension:
@@ -127,7 +133,7 @@ inline void Particle::getHypersphereRandomPoint(vector<REAL> &hypersphere_random
 		// find the centre of gravity for each dimension (3.10)
 		for (DIMENSION i = 0; i < num_dimensions_; i++) {
 			centre_of_gravity[i] = position_[i] + C_CONST * ((previous_best_position_[i] +
-								   (*neighbourhood_best_position_)[i] - 2.0 * position_[i]) / 3.0);
+								   neighbourhood_best_position_[i] - 2.0 * position_[i]) / 3.0);
 
 			random_values[i] = plus_minus_one_distribution_(random_engine_);
 			cumulative_random_values_squared += pow(random_values[i], 2);

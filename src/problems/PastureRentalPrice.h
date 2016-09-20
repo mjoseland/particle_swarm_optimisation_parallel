@@ -18,6 +18,7 @@ public:
 
 	// returns the sigma value for a given linear regression attempt
 	REAL getOutput(const vector<REAL> &dimension_values) const;
+	//Problem *getCopy();
 
 private:
 	string file_name = "pasture_rental_price.txt";

@@ -6,6 +6,7 @@
 #define PSO_TEST_BRAINVSBODYWEIGHT_H
 
 #include <cmath>
+#include <omp.h>
 
 #include "RegressionFileReader.h"
 #include "problem.h"
@@ -17,6 +18,7 @@ public:
 
 	// returns the sigma value for a given linear regression attempt
   	REAL getOutput(const vector<REAL> &dimension_values) const;
+	Problem *getCopy();
 
 private:
 	string file_name = "brain_vs_body_weight.txt";

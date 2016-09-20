@@ -8,6 +8,7 @@
 #include <vector>
 #include <array>
 #include <random>
+#include <omp.h>
 
 #include "pso_types.h"
 #include "problems/problem.h"
@@ -38,12 +39,12 @@ private:
 	const REAL lower_bound_;
 	const REAL upper_bound_;
 
-
 	REAL previous_best_output_;
 	vector<REAL> position_;
 	vector<REAL> velocity_;
 	vector<REAL> previous_best_position_;
-	const vector<REAL> *neighbourhood_best_position_;
+	vector<REAL> neighbourhood_best_position_;
+	const vector<REAL> *neighbourhood_best_ptr_;
 
 	// a unique random_engine for RNG in this particle
 	default_random_engine random_engine_;

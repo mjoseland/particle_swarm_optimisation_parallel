@@ -12,13 +12,13 @@ set(SOURCE_FILES
     src/problems/BrainVsBodyWeight.h
     src/problems/PastureRentalPrice.cpp
     src/problems/PastureRentalPrice.h
-    src/problems/problem.cpp
-    src/problems/problem.h
+        src/problem.cpp
+        src/problem.h
     src/problems/RegressionFileReader.cpp
     src/problems/RegressionFileReader.h
-    src/problems/sphere_test_problem_25d.cpp
+        src/problems/ParabolaTestProblem25d.cpp
     src/problems/sphere_test_problem_25d.h
-    src/problems/sphere_test_problem_50d.cpp
+        src/problems/ParabolaTestProblem50d.cpp
     src/problems/sphere_test_problem_50d.h
     src/problems/sphere_test_problem_5d.cpp
     src/problems/sphere_test_problem_5d.h
@@ -28,6 +28,6 @@ set(SOURCE_FILES
     src/pso_types.h
     src/swarm.cpp
     src/Swarm.h
-    Makefile)
+    Makefile src/ProblemOptimiser.cpp src/ProblemSolver.h src/problems/RegressionProblem.cpp src/problems/RegressionProblem.h)
 
 add_executable(particle_swarm_optimisation_parallel ${SOURCE_FILES})

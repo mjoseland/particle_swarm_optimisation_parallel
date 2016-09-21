@@ -2,7 +2,7 @@
 // Created by Malcolm Joseland on 4/08/2016.
 //
 
-#include "sphere_test_problem_5d.h"
+#include "parabola_test_problem_5d.h"
 
 ParabolaTestProblem5d::ParabolaTestProblem5d() :
 		Problem("Minimize 5-Dimension Parabola", 5, -100.0, 100.0, true) { }

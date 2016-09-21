@@ -2,7 +2,7 @@
 // Created by Malcolm Joseland on 19/08/2016.
 //
 
-#include "sphere_test_problem_50d.h"
+#include "parabola_test_problem_50d.h"
 
 ParabolaTestProblem50d::ParabolaTestProblem50d() :
 		Problem("Minimise 50-Dimemsion parabola", 50, -100.0, 100.0, true) { }

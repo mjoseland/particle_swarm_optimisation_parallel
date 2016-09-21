@@ -11,7 +11,7 @@
 #include <omp.h>
 
 #include "pso_types.h"
-#include "problems/problem.h"
+#include "problem.h"
 
 // 1 / (2 * ln(2))
 #define W_CONST 0.7213475204

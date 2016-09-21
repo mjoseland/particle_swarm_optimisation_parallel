@@ -10,7 +10,7 @@
 
 #include "pso_types.h"
 #include "particle.h"
-#include "problems/problem.h"
+#include "problem.h"
 
 #define SWARM_SIZE 40
 
@@ -23,8 +23,8 @@ class Swarm {
 public:
     Swarm(Problem *problem);
 
-	const vector<REAL> *const getBestSolution();
-	REAL getBestSolutionOutput();
+	const vector<REAL> *getBestSolution() const;
+	REAL getBestSolutionOutput() const;
 
 	void iterateNTimes(int iterate_count);
 
@@ -35,7 +35,7 @@ private:
     vector<Particle> particles_;
 	vector<vector<size_t>> neighbours_;
 
-	void setParticleNeighbourhoodBests();
+	inline void setParticleNeighbourhoodBests();
 };
 
 

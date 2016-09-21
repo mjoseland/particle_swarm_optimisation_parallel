@@ -34,11 +34,11 @@ Swarm::Swarm(Problem *problem) : problem_(problem) {
 	setParticleNeighbourhoodBests();
 }
 
-const vector<REAL> *const Swarm::getBestSolution() {
+const vector<REAL> *Swarm::getBestSolution() const {
 	return particles_[optimal_particle_index_].getPreviousBestPosition();
 }
 
-REAL Swarm::getBestSolutionOutput() {
+REAL Swarm::getBestSolutionOutput() const {
 	return particles_[optimal_particle_index_].getPreviousBestOutput();
 }
 
@@ -48,7 +48,7 @@ void Swarm::iterateNTimes(int iterate_count) {
 	for (int i = 0; i < iterate_count; i++) {
 		// iterate all remaining particles while retaining the global best output
 
-		#pragma omp parallel for
+		//#pragma omp parallel for
 		for (size_t j = 0; j < SWARM_SIZE; j++) {
 			particles_[j].iterate();
 		}
@@ -65,10 +65,12 @@ void Swarm::iterateNTimes(int iterate_count) {
 			}
 		}
 	}
+
+
 }
 
 
-void Swarm::setParticleNeighbourhoodBests() {
+inline void Swarm::setParticleNeighbourhoodBests() {
 	// set each particle's neighbourhood best to the position of the particle with the lowest previous best output
 	//#pragma omp parallel for
 	for (size_t i = 0; i < SWARM_SIZE; i++) {

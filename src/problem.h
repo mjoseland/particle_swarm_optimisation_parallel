@@ -10,7 +10,7 @@
 #include <ctime>
 #include <string>
 
-#include "../pso_types.h"
+#include "pso_types.h"
 
 using namespace std;
 

@@ -2,7 +2,7 @@
 // Created by Malcolm Joseland on 19/08/2016.
 //
 
-#include "sphere_test_problem_25d.h"
+#include "parabola_test_problem_25d.h"
 
 ParabolaTestProblem25d::ParabolaTestProblem25d() :
 		Problem("Minimise 25-Dimension parabola", 25, -100.0, 100.0, true) { }

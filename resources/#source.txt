@@ -1,0 +1,6 @@
+All datasets sourced from the UCI machine learning repository available from: 
+http://archive.ics.uci.edu/ml/datasets.html?format=&task=reg&att=&area=&numAtt=&numIns=&type=&sort=attup&view=table
+
+modifications:
+  . made all values tab-separated
+  . lines with incomplete data removed

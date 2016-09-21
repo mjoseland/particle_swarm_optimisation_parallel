@@ -7,7 +7,7 @@
 
 #include <cmath>
 
-#include "problem.h"
+#include "../problem.h"
 
 using namespace std;
 

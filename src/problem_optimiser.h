@@ -19,7 +19,7 @@
 #include "problems/parabola_test_problem_50d.h"
 #include "problems/regression_problem.h"
 
-#define NUM_ITERATIONS 2000
+#define NUM_ITERATIONS 10000
 #define CONTROL_PROCESS_ID
 #define PROBLEM_COUNT 10
 
@@ -31,11 +31,10 @@ public:
 	//~ProblemOptimiser() {}
 
 	// initialises and optimises all required problems
-	static void optimiseProblems(int job_count, int rank);
+	static void optimiseProblems(int rank);
 
 private:
-	static void optimiseProblem(Problem *problem);
-	static Problem *getInitialisedProblem(size_t problem_id);
+	static Problem *getInitialisedProblem(int problem_id);
 };
 
 

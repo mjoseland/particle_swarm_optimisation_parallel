@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
 
 	// if we aren't the controller process begin asking for problems and optimising them
 	if (!is_control_process) {
-		ProblemOptimiser::optimiseProblems(JOB_COUNT, rank);
+		ProblemOptimiser::optimiseProblems(rank);
 	}
 
 	MPI_Finalize();
@@ -42,45 +42,49 @@ int main(int argc, char **argv) {
 }
 
 void manageMpiJobs(int rank) {
-	// disable dynamic teams and set num_threads to 1 because the control node doesn't need to parallelise
-	//omp_set_dynamic(0);
-	//omp_set_num_threads(1);
-
-	int num_processes;
-
 	// get the size of the group of MPI processes
-	MPI_Comm_size(MPI_COMM_WORLD, &num_nodes);
+	int num_processes;
+	MPI_Comm_size(MPI_COMM_WORLD, &num_processes);
+
+	// print the run description
+	cout << "Optimising " << PROBLEM_COUNT << " problems for " << NUM_ITERATIONS << " iterations per problem using "
+				<< (num_processes - 1) << " MPI processes" << endl;
 
 	// each process will self-allocate the job with ID = rank - 1, unless that ID is >= num_initial_allocations
 	int next_job = num_processes - 1;
 
-	char problem_name[128];
-	int num_problem_dimensions;
+	DIMENSION num_problem_dimensions;
 	vector<REAL> optimal_values;
 	REAL output;
 
-	MPI_Status status;
+	MPI::Status status;
 	// receive problem optimisation output and send the `
 	for (int i = 0; i < PROBLEM_COUNT; i++) {
 		// receive the name of the optimised problem
-		MPI_Recv(&problem_name, 128, MPI_CHAR, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+		//MPI_Recv(&problem_name_len, 1, MPI_UNSIGNED_LONG, MPI_ANY_SOURCE, 1, MPI_COMM_WORLD, &status);
+		MPI::COMM_WORLD.Probe(MPI::ANY_SOURCE, 1, status);
+		int cstr_len = status.Get_count(MPI::CHAR);
+		char *problem_name_cstr = new char[cstr_len + 1];
+		MPI::COMM_WORLD.Recv(problem_name_cstr, cstr_len, MPI::CHAR, status.Get_source(), 1, status);
+
+		problem_name_cstr[cstr_len] = '\0';
 
 		// get the optimal values for each dimension and the output of those values
-		MPI_Recv(&num_problem_dimensions, 1, MPI_LONG_INT, status.MPI_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+		MPI::COMM_WORLD.Recv(&num_problem_dimensions, 1, MPI::UNSIGNED_LONG, status.Get_source(), 1);
 		optimal_values.resize(num_problem_dimensions);
-		MPI_Recv(&optimal_values, num_problem_dimensions, MPI_INT, status.MPI_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-		MPI_Recv(&output, 1, MPI_FLOAT, status.MPI_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+		MPI::COMM_WORLD.Recv(&optimal_values.front(), num_problem_dimensions, MPI::DOUBLE, status.Get_source(), 1);
+		MPI::COMM_WORLD.Recv(&output, 1, MPI::DOUBLE, status.Get_source(), 1);
 
 
 		// send the id of the next job back to the process, the id may be == PROBLEM_COUNT, which
 		// causes the receiving process to terminate
-		MPI_Send(&next_job, 1, MPI_INT, status.MPI_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD);
+		MPI::COMM_WORLD.Send(&next_job, 1, MPI_INT, status.Get_source(), 1);
 
 		// print the name and optimal solution to the problem
+		//string problem_name (problem_name_cstr);
 
 		cout << endl;
-		cout << "Optimal solution for " << problem_name << endl;
-		cout << "Number of iterations: " << NUM_ITERATIONS << endl;
+		cout << "Optimal solution for: " << problem_name_cstr << " (" << num_problem_dimensions << " dimensions)" << endl;
 
 		cout << "Optimal values for each dimension: " << endl;
 		for (DIMENSION i = 0; i < num_problem_dimensions - 1; i++) {

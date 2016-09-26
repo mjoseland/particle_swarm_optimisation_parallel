@@ -4,37 +4,39 @@
 
 #include "problem_optimiser.h"
 
-void ProblemOptimiser::optimiseProblems(int job_count, int rank) {
+void ProblemOptimiser::optimiseProblems(int rank) {
 	int next_problem_id;
-	int rank;
 
 	// find rank and the index of the first problem to solve
 	// if there are more mpi processes than jobs and this is one of the excess processes, no problems will
 	// be optimised by this process
-	MPI_Comm_rank (MPI_COMM_WORLD, &rank);
 	next_problem_id = rank - 1;
 
-	Problem *next_problem;
+	Problem *current_problem;
 	MPI_Status status;
 
-	while (next_problem_id < problem_count) {
-		cout << "rank next_problem_id num_threads: " << rank << ' ' << next_problem_id << ' ' << omp_get_num_threads();
-
+	while (next_problem_id < PROBLEM_COUNT) {
 		// solve problem in parallel
+		current_problem = getInitialisedProblem(next_problem_id);
 
-		char problem_name[] = to_string(next_problem_id).c_str;
-		DIMENSION dimension_count = 1;
-		vector<REAL> dim_vals({0.0});
-		REAL output = 1.0;
+		Swarm swarm(current_problem);
+		swarm.iterateNTimes(NUM_ITERATIONS);
+
+		const string problem_name = current_problem->name_;
+		//unsigned long problem_name_len = current_problem->name_.size();
+		DIMENSION num_dimensions = current_problem->num_dimensions_;
+		const vector<REAL> &optimised_solution = *(swarm.getBestSolution());
+		REAL output = swarm.getBestSolutionOutput();
 
 		// send name, dimension count, dimension values, and output to control process
-		MPI_Send(&problem_name, 128, MPI_CHAR, 0, MPI_ANY_TAG, MPI_COMM_WORLD);
-		MPI_Send(&dimension_count, 1, MPI_UNSIGNED_LONG, 0, MPI_ANY_TAG, MPI_COMM_WORLD);
-		MPI_Send(&dim_vals, dimension_count, MPI_REAL, 0, MPI_ANY_TAG, MPI_COMM_WORLD);
-		MPI_Send(&output, 1, MPI_REAL, 0, MPI_ANY_TAG, MPI_COMM_WORLD);
+		//MPI_Send(&problem_name_len, 1, MPI_UNSIGNED_LONG, 0, 1, MPI_COMM_WORLD);
+		MPI::COMM_WORLD.Send(problem_name.c_str(), problem_name.length(), MPI::CHAR, 0, 1);
+		MPI::COMM_WORLD.Send(&num_dimensions, 1, MPI::UNSIGNED_LONG, 0, 1);
+		MPI::COMM_WORLD.Send(&optimised_solution.front(), num_dimensions, MPI::DOUBLE, 0, 1);
+		MPI::COMM_WORLD.Send(&output, 1, MPI::DOUBLE, 0, 1);
 
 
-		// receive next_problem
+		// receive ID of next problem
 		// if there are no more problems, the controller node will send problem_count as the next job ID
 		MPI_Recv(&next_problem_id, 1, MPI_INT, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
 	}
@@ -42,22 +44,16 @@ void ProblemOptimiser::optimiseProblems(int job_count, int rank) {
 
 /* ---------------------- private functions -------------------------*/
 
-void ProblemOptimiser::optimiseProblem(Problem *problem) {
-	Swarm test_swarm(problem);
-
-	test_swarm.iterateNTimes(NUM_ITERATIONS);
-}
-
-Problem *ProblemOptimiser::getInitialisedProblem(size_t problem_id) {
+Problem *ProblemOptimiser::getInitialisedProblem(int problem_id) {
 	switch (problem_id) {
 		case 0:
-			// find minimal point in a 5 dimesion parabola
+			// find minimal point in a 5 dimesion parabola, search space -100.0 to 100.0
 			return new ParabolaTestProblem5d();
 		case 1:
-			// find minimal point in a 25 dimesion parabola
+			// find minimal point in a 25 dimesion parabol, search space -100.0 to 100.0
 			return new ParabolaTestProblem25d();
 		case 2:
-			// find minimal point in a 50 dimesion parabola
+			// find minimal point in a 50 dimesion parabol, search space -100.0 to 100.0
 			return new ParabolaTestProblem50d();
 		case 3:
 			return new RegressionProblem("auto_mpg.txt", 5, -10.0, 10.0,

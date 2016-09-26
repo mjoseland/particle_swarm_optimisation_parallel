@@ -9,15 +9,6 @@ Swarm::Swarm(Problem *problem) : problem_(problem) {
 	// initialise the required number of particles in the particles_ vector
 	particles_.reserve(SWARM_SIZE);
 
-
-	//#pragma omp parallel
-
-	// create a copy of the problem for each thread for use by particles
-	// all references to problem_ from this class will still use the originial problem but all
-	// use of the problem object within particle will use a thread-unique copy of the original
-	// this w
-	//Problem private_problem = *problem;
-
 	for (size_t i = 0; i < SWARM_SIZE; i++) {
 		particles_.push_back(Particle(problem_, i));
 	}
@@ -48,7 +39,7 @@ void Swarm::iterateNTimes(int iterate_count) {
 	for (int i = 0; i < iterate_count; i++) {
 		// iterate all remaining particles while retaining the global best output
 
-		//#pragma omp parallel for
+		#pragma omp parallel for
 		for (size_t j = 0; j < SWARM_SIZE; j++) {
 			particles_[j].iterate();
 		}

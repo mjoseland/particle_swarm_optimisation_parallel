@@ -9,4 +9,4 @@ FILES += src/problems/parabola_test_problem_50d.cpp src/problems/regression_file
 FILES += src/problems/regression_problem.cpp
 
 all:
-	g++-4.8 $(FILES) $(CPPFLAGS) -o pso_test
+	mpic++ $(FILES) $(CPPFLAGS) -o pso_test

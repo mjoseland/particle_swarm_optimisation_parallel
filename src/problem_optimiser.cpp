@@ -4,30 +4,48 @@
 
 #include "problem_optimiser.h"
 
-void ProblemOptimiser::optimiseProblems() {
-	for (size_t i = 0; i < 10; i++) {
-		auto problem_ptr = getInitialisedProblem(i);
-		optimiseProblem(problem_ptr);
+void ProblemOptimiser::optimiseProblems(int job_count, int rank) {
+	int next_problem_id;
+	int rank;
+
+	// find rank and the index of the first problem to solve
+	// if there are more mpi processes than jobs and this is one of the excess processes, no problems will
+	// be optimised by this process
+	MPI_Comm_rank (MPI_COMM_WORLD, &rank);
+	next_problem_id = rank - 1;
+
+	Problem *next_problem;
+	MPI_Status status;
+
+	while (next_problem_id < problem_count) {
+		cout << "rank next_problem_id num_threads: " << rank << ' ' << next_problem_id << ' ' << omp_get_num_threads();
+
+		// solve problem in parallel
+
+		char problem_name[] = to_string(next_problem_id).c_str;
+		DIMENSION dimension_count = 1;
+		vector<REAL> dim_vals({0.0});
+		REAL output = 1.0;
+
+		// send name, dimension count, dimension values, and output to control process
+		MPI_Send(&problem_name, 128, MPI_CHAR, 0, MPI_ANY_TAG, MPI_COMM_WORLD);
+		MPI_Send(&dimension_count, 1, MPI_UNSIGNED_LONG, 0, MPI_ANY_TAG, MPI_COMM_WORLD);
+		MPI_Send(&dim_vals, dimension_count, MPI_REAL, 0, MPI_ANY_TAG, MPI_COMM_WORLD);
+		MPI_Send(&output, 1, MPI_REAL, 0, MPI_ANY_TAG, MPI_COMM_WORLD);
+
+
+		// receive next_problem
+		// if there are no more problems, the controller node will send problem_count as the next job ID
+		MPI_Recv(&next_problem_id, 1, MPI_INT, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
 	}
 }
 
 /* ---------------------- private functions -------------------------*/
 
 void ProblemOptimiser::optimiseProblem(Problem *problem) {
-	cout << endl;
-	cout << "Performing optimisation for: " << problem->name_ << endl;
-
 	Swarm test_swarm(problem);
 
 	test_swarm.iterateNTimes(NUM_ITERATIONS);
-
-	cout << "Optimised solution after " << NUM_ITERATIONS << " iterations:" << endl;
-	for (DIMENSION i = 0; i < problem->num_dimensions_ - 1; i++) {
-		cout << (*test_swarm.getBestSolution())[i] << ", ";
-	}
-	cout << (*test_swarm.getBestSolution())[problem->num_dimensions_ - 1] << endl;
-
-	cout << "Solution ouput: " << test_swarm.getBestSolutionOutput() << endl;
 }
 
 Problem *ProblemOptimiser::getInitialisedProblem(size_t problem_id) {

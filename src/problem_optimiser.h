@@ -6,6 +6,10 @@
 #define PARTICLE_SWARM_OPTIMISATION_PARALLEL_PROBLEMSOLVER_H
 
 #include <iostream>
+//#include <stdlib.h>
+#include <unistd.h>
+#include <omp.h>
+#include <mpi.h>
 
 #include "swarm.h"
 #include "problem.h"
@@ -16,20 +20,22 @@
 #include "problems/regression_problem.h"
 
 #define NUM_ITERATIONS 2000
+#define CONTROL_PROCESS_ID
+#define PROBLEM_COUNT 10
 
 using namespace std;
 
 class ProblemOptimiser {
 public:
-	ProblemOptimiser() {}
-	~ProblemOptimiser() {}
+	//ProblemOptimiser() {}
+	//~ProblemOptimiser() {}
 
 	// initialises and optimises all required problems
-	void optimiseProblems();
+	static void optimiseProblems(int job_count, int rank);
 
 private:
-	void optimiseProblem(Problem *problem);
-	Problem *getInitialisedProblem(size_t problem_id);
+	static void optimiseProblem(Problem *problem);
+	static Problem *getInitialisedProblem(size_t problem_id);
 };
 
 

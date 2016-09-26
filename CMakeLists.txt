@@ -28,6 +28,6 @@ set(SOURCE_FILES
     src/pso_types.h
     src/swarm.cpp
     src/Swarm.h
-    Makefile src/ProblemOptimiser.cpp src/ProblemSolver.h src/problems/RegressionProblem.cpp src/problems/RegressionProblem.h)
+    Makefile src/ProblemOptimiser.cpp src/ProblemSolver.h src/problems/RegressionProblem.cpp src/problems/RegressionProblem.h controller_src/main.cpp src/mpi_controller.cpp src/mpi_controller.h)
 
 add_executable(particle_swarm_optimisation_parallel ${SOURCE_FILES})

@@ -65,8 +65,6 @@ void Swarm::iterateNTimes(int iterate_count) {
 			}
 		}
 	}
-
-
 }
 
 
